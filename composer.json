@@ -1,0 +1,26 @@
+{
+  "name": "vivait/symfony-console-promptable-options",
+  "description": "Allows you to specify options to be asked for via questions using the Symfony console component.",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Matt Brunt",
+      "email": "matt.brunt@vivait.co.uk"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Vivait\\PromptableOptions\\": "src/",
+      "Vivait\\PromptableOptions\\Tests\\": "tests/"
+    }
+  },
+  "require": {
+    "php": ">=5.4",
+    "symfony/console": "^2.8"
+  },
+  "require-dev": {
+    "behat/behat": "^3.3",
+    "symfony/process": "^3.2"
+  }
+}
