@@ -92,6 +92,25 @@ class PromptableCommand extends Command
 }
 ```
 
+## Output
+
+When no options are specified - promptable options are asked for, and non-promptable options are still optional:
+
+![No options specified](docs/assets/images/no-options-specified.png)
+
+When some options are specified - promptable options are asked for:
+
+![Some options specified](docs/assets/images/some-options-given-to-command.png)
+
+When all options are specified - nothing is prompted for input:
+
+![Some options specified](docs/assets/images/all-options-given-to-command.png)
+
+When some options are not specified and the command is run with `--no-interaction` - when an option not specified is asked for, the command errors:
+
+![Some options specified](docs/assets/images/no-interaction-error.png)
+
+
 ## Limitations
 
 This has only been tested with string options set to `InputOption::VALUE_REQUIRED` - any other options are (currently) unsupported.
