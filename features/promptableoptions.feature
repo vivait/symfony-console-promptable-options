@@ -23,5 +23,5 @@ Feature: Promptable options on Symfony Console commands
 
   Scenario: Running in non-interactive mode causes the command to exit out
     When I run the PromptableCommand in "non-interactive" mode
-    Then I should see "Cannot prompt for name, command is running in non-interactive mode."
+    Then I should see "Cannot prompt for name, command is running in non-interactive mode"
     And the command should not have completed successfully

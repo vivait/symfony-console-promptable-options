@@ -60,7 +60,7 @@ trait PromptableOptionsTrait
 
         if ( ! $this->consoleInput->isInteractive()) {
             throw new \Exception(
-                sprintf('Cannot prompt for %s, command is running in non-interactive mode.', $optionName)
+                sprintf('Cannot prompt for %s, command is running in non-interactive mode', $optionName)
             );
         }
 
