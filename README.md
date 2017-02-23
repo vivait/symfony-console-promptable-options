@@ -4,7 +4,7 @@
 
 ## Compatibility / Requirements
 
-* PHP 5.4 and above
+* PHP 5.5.9 and above
 * symfony/console ^2.8|^3.0
 
 ## Installation
