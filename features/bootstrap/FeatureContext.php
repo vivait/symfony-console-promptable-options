@@ -1,6 +1,7 @@
 <?php
 
 use Behat\Behat\Context\Context;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
@@ -28,18 +29,33 @@ class FeatureContext implements Context
     private $errorOutput;
 
     /**
-     * @When I run the PromptableCommand and input :input
-     * @When I run the PromptableCommand with the option(s) :option
-     * @When I run the PromptableCommand with the option(s) :option and input :input
-     * @When I run the PromptableCommand in :mode mode
+     * @When I run the :command
+     * @When I run the :command and input :input
+     * @When I run the :command with the option(s) :option
+     * @When I run the :command with the option(s) :option and input :input
+     * @When I run the :command in :mode mode
      *
+     * @param string $command
      * @param string $input
      * @param string $option
      * @param string $mode
      */
-    public function iRunThePromptableCommandWithTheOption($input = '', $option = '', $mode = '')
-    {
-        $this->process = new Process(sprintf('php console.php promptable:test %s', $option));
+    public function iRunThePromptableCommandWithTheOption(
+        $command = 'PromptableCommand', $input = '', $option = '', $mode = ''
+    ) {
+        $stubCommandNamespace = '\Vivait\PromptableOptions\Tests\Stub\Command\\';
+        $className = $stubCommandNamespace . $command;
+        
+        if ( ! class_exists($className)) {
+            throw new InvalidArgumentException(sprintf("Class %s does not exist.", $className));
+        }
+
+        /**
+         * @var Command $class
+         */
+        $class = new $className();
+        
+        $this->process = new Process(sprintf('php console.php %s %s', $class->getName(), $option));
 
         $interactiveMode = true;
 

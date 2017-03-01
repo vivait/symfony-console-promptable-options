@@ -15,9 +15,22 @@
 
 Configure the promptable options in the `configure()` method of your command.
 
-You can call the `$this->addPrompt(string $optionName)` fluently with the other options to add a prompt for a single option.
+You can call the `$this->addPrompt(string $optionName, array $configuration = [])` fluently with the other options to add a prompt for a single option.
 
-Alternatively, call `$this->addPrompts(array $optionNames)` fluently with the other options to add prompts for multiple options at the same time. This does not over-write any previously added prompts, it adds them on to the options.
+Alternatively, call `$this->addPrompts(array $options = [])` fluently with the other options to add prompts for multiple options at the same time by providing a key value array of option names and their desired configurations. This does not over-write any previously added prompts, it adds them on to the options. Here's an example of adding multiple prompts:
+```php
+    protected function configure()
+    {
+        $this
+            ->setName('promptable:test')
+            ->addPrompts(
+                [
+                    'name', // No configuration provided - uses defaults
+                    'age' => ['type' => 'int', 'required' => true]
+                ]
+            );
+    }
+```
 
 Once configured, access options using  `$this->getConsoleOptionInput(string $optionName)`.
 
@@ -52,21 +65,25 @@ class PromptableCommand extends Command
     {
         $this
             ->setName('promptable:demo')
-            ->addOption('name', null, InputOption::VALUE_REQUIRED, 'Your name')
-            ->addPrompt('name') // add a single thing to be prompted
-            ->addOption('age', null, InputOption::VALUE_REQUIRED, 'Your age')
-            ->addOption('occupation', null, InputOption::VALUE_REQUIRED, 'Your occupation')
-            ->addPrompt('occupation') // add a single thing to be prompted
+            ->addPrompt(
+                'name',
+                ['description' => 'Your name', 'required' => true]
+            ) // add a single thing to be prompted, which has a type or 'string' by default
+            ->addPrompt('age', ['type' => 'int', 'description' => 'Your age', 'required' => true])
+            ->addPrompt('occupation', ['type' => 'string', 'description' => 'Your occupation', 'required' => true])
             ->setDescription('To demonstrate the use of promptable input options');
         
         // alternatively:
         
         $this
             ->setName('promptable:demo')
-            ->addOption('name', null, InputOption::VALUE_REQUIRED, 'Your name')
-            ->addOption('age', null, InputOption::VALUE_REQUIRED, 'Your age')
-            ->addOption('occupation', null, InputOption::VALUE_REQUIRED, 'Your occupation')
-            ->addPrompts(['name', 'occupation']) // add multiple things to be prompted
+            ->addPrompts(
+                [
+                    'name'       => ['description' => 'Your name', 'required' => true],
+                    'age'        => ['type' => 'int', 'description' => 'Your age', 'required' => true],
+                    'occupation' => ['description' => 'Your occupation', 'required' => true]
+                ]
+            ) // add multiple things to be prompted
             ->setDescription('To demonstrate the use of promptable input options');
     }
 
@@ -111,9 +128,16 @@ When some options are not specified and the command is run with `--no-interactio
 ![Some options specified](docs/assets/images/no-interaction-error.png)
 
 
-## Limitations
+## Option configuration
 
-This has only been tested with string options set to `InputOption::VALUE_REQUIRED` - any other options are (currently) unsupported.
+The following configuration options are available per option:
+
+| Configuration value | Description | Allowed values |
+|---------------------|-------------|----------------|
+| type | The type of value to be expected (input will be transformed) | `int`, `integer`, `float`, `bool`, `boolean`, `string` (written as strings)|
+| description | The description for the option/the text to be displayed when asking for the option | _anything_ |
+| required | Whether or not the option is required. If it's set to true, then a value MUST be entered and they will be prompted until one is provided. If set to false, a default value will be used if set, or `null` will be returned as their input. | `true` or `false` (as boolean)
+| default | The default value to use if one is not provided (if not required) | _anything_
 
 ## Contributing
 

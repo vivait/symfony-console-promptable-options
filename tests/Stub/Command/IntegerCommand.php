@@ -7,7 +7,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Vivait\PromptableOptions\Command\PromptableOptionsTrait;
 
-class PromptableCommand extends Command
+class IntegerCommand extends Command
 {
 
     use PromptableOptionsTrait;
@@ -15,11 +15,9 @@ class PromptableCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('promptable:test')
-            ->addPrompt('name', ['required' => true, 'description' => 'Your name'])
+            ->setName('promptable:test:integer')
             ->addPrompt('age', ['type' => 'int', 'required' => true, 'description' => 'Your age'])
-            ->addPrompt('occupation', ['required' => true, 'description' => 'Your occupation'])
-            ->setDescription('To test the use of promptable input options');
+            ->setDescription('To test promptable option types');
     }
 
     /**
@@ -28,15 +26,8 @@ class PromptableCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->setUpPrompt($input, $output);
-
-        $name = $this->getConsoleOptionInput('name');
-
-        $output->writeln(sprintf('Hello %s!', $name));
-
+        
         $age = $this->getConsoleOptionInput('age');
-
-        if ($age) {
-            $output->writeln(sprintf('You are %s years old', $age));
-        }
+        $output->writeln(sprintf("Type age: %s", gettype($age)));
     }
 }
